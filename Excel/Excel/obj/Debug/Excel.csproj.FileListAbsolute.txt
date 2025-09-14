@@ -1,0 +1,10 @@
+C:\C#\Excel\Excel\bin\Debug\Excel.exe.config
+C:\C#\Excel\Excel\bin\Debug\Excel.exe
+C:\C#\Excel\Excel\bin\Debug\Excel.pdb
+C:\C#\Excel\Excel\obj\Debug\Excel.csproj.AssemblyReference.cache
+C:\C#\Excel\Excel\obj\Debug\Excel.csproj.ResolveComReference.cache
+C:\C#\Excel\Excel\obj\Debug\Excel.Properties.Resources.resources
+C:\C#\Excel\Excel\obj\Debug\Excel.csproj.GenerateResource.cache
+C:\C#\Excel\Excel\obj\Debug\Excel.csproj.CoreCompileInputs.cache
+C:\C#\Excel\Excel\obj\Debug\Excel.exe
+C:\C#\Excel\Excel\obj\Debug\Excel.pdb
