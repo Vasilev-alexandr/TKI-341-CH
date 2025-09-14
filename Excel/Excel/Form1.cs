@@ -1,139 +1,143 @@
-using System.Drawing;
+using System.Reflection;
+using ExcelApp = Microsoft.Office.Interop.Excel;
+using System.IO;
 using System.Windows.Forms;
+using System;
 
 namespace VasilevPracticeExcel
 {
-    partial class Form1
+    public partial class Form1 : Form
     {
-        /// <summary>
-        ///  Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        string[] csvData;
 
-        /// <summary>
-        ///  Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
+        public Form1()
         {
-            if (disposing && (components != null))
+            InitializeComponent();
+
+            string csvFilePath = "defaulData.csv";
+            if (!File.Exists(csvFilePath))
             {
-                components.Dispose();
+                CreateDefaultCsvFile(csvFilePath);
             }
-            base.Dispose(disposing);
+
+            csvData = File.ReadAllText(csvFilePath, System.Text.Encoding.UTF8).Split(',');
+
+            for (int i = 0; i < csvData.Length; i += 9)
+            {
+                if (i + 8 < csvData.Length)
+                {
+                    PreviewDGV.Rows.Add(
+                        csvData[i], csvData[i + 1], csvData[i + 2],
+                        csvData[i + 3], csvData[i + 4], csvData[i + 5],
+                        csvData[i + 6], csvData[i + 7], csvData[i + 8]
+                    );
+                }
+            }
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
+        private void CreateDefaultCsvFile(string filePath)
         {
-            PreviewDGV = new DataGridView();
-            Column1 = new DataGridViewTextBoxColumn();
-            Column2 = new DataGridViewTextBoxColumn();
-            Column3 = new DataGridViewTextBoxColumn();
-            Column4 = new DataGridViewTextBoxColumn();
-            Column5 = new DataGridViewTextBoxColumn();
-            Column6 = new DataGridViewTextBoxColumn();
-            Column7 = new DataGridViewTextBoxColumn();
-            Column8 = new DataGridViewTextBoxColumn();
-            Column9 = new DataGridViewTextBoxColumn();
-            buttonSave = new Button();
-            label1 = new Label();
-            ((System.ComponentModel.ISupportInitialize)PreviewDGV).BeginInit();
-            SuspendLayout();
-            
-            PreviewDGV.AllowUserToAddRows = false;
-            PreviewDGV.AllowUserToDeleteRows = false;
-            PreviewDGV.AllowUserToOrderColumns = true;
-            PreviewDGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            PreviewDGV.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4, Column5, Column6, Column7, Column8, Column9 });
-            PreviewDGV.Location = new Point(12, 27);
-            PreviewDGV.Name = "PreviewDGV";
-            PreviewDGV.ReadOnly = true;
-            PreviewDGV.Size = new Size(943, 260);
-            PreviewDGV.TabIndex = 1;
-            
-            Column1.HeaderText = "Дата записи";
-            Column1.Name = "Column1";
-            Column1.ReadOnly = true;
-            
-            Column2.HeaderText = "Номер документа";
-            Column2.Name = "Column2";
-            Column2.ReadOnly = true;
-           
-            Column3.HeaderText = "Номер по порядку";
-            Column3.Name = "Column3";
-            Column3.ReadOnly = true;
-            
-            Column4.HeaderText = "Получено/отправлено";
-            Column4.Name = "Column4";
-            Column4.ReadOnly = true;
-             
-            Column5.HeaderText = "Единица продукции";
-            Column5.Name = "Column5";
-            Column5.ReadOnly = true;
-           
-            Column6.HeaderText = "Приход";
-            Column6.Name = "Column6";
-            Column6.ReadOnly = true;
-            
-            Column7.HeaderText = "Расход";
-            Column7.Name = "Column7";
-            Column7.ReadOnly = true;
-           
-            Column8.HeaderText = "Остаток";
-            Column8.Name = "Column8";
-            Column8.ReadOnly = true;
-             
-            Column9.HeaderText = "Дата, подпись";
-            Column9.Name = "Column9";
-            Column9.ReadOnly = true;
-          
-            buttonSave.Location = new Point(843, 293);
-            buttonSave.Name = "buttonSave";
-            buttonSave.Size = new Size(111, 23);
-            buttonSave.TabIndex = 0;
-            buttonSave.Text = "Выгрузка в Excel";
-            buttonSave.UseVisualStyleBackColor = true;
-            buttonSave.Click += buttonSave_Click;
-           
-            label1.AutoSize = true;
-            label1.Location = new Point(12, 9);
-            label1.Name = "label1";
-            label1.Size = new Size(90, 15);
-            label1.TabIndex = 2;
-            label1.Text = "Предпросмотр";
-           
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(966, 324);
-            Controls.Add(label1);
-            Controls.Add(PreviewDGV);
-            Controls.Add(buttonSave);
-            Name = "Form1";
-            Text = "Задание №2 выполнил: Васильев А.С., Номер варианта: 3 Дата выполнения: 15/08/2025";
-            ((System.ComponentModel.ISupportInitialize)PreviewDGV).EndInit();
-            ResumeLayout(false);
-            PerformLayout();
+            string[] defaultData = {
+                "2025-01-15", "ТН-001", "1", "Поставщик ООО 'ВООВОВИО'", "Сталь", "500", "0", "500", "Иванов 15.01.2025",
+                "2025-01-16", "РН-001", "2", "Цех механической обработки", "Сталь листовая", "0", "200", "300", "Петров 16.01.2025",
+                "2025-01-17", "ТН-002", "3", "Поставщик ИП луьщьдс", "Болты М", "1000", "0", "1000", "Федоров 17.01.2025",
+                "2025-01-18", "РН-002", "4", "Сборочный цех", "Болты ", "0", "300", "700", "Козлов 18.01.2025"
+            };
+
+            File.WriteAllText(filePath, string.Join(",", defaultData));
         }
 
-        #endregion
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ExcelApp.Application app = new ExcelApp.Application();
+                app.Visible = false;
+                ExcelApp.Workbook wb = app.Workbooks.Add(Missing.Value);
+                ExcelApp.Worksheet ws = (ExcelApp.Worksheet)wb.Sheets[1];
+                ws.Activate();
 
-        private Button buttonSave;
-        private DataGridView PreviewDGV;
-        private Label label1;
-        private DataGridViewTextBoxColumn Column1;
-        private DataGridViewTextBoxColumn Column2;
-        private DataGridViewTextBoxColumn Column3;
-        private DataGridViewTextBoxColumn Column4;
-        private DataGridViewTextBoxColumn Column5;
-        private DataGridViewTextBoxColumn Column6;
-        private DataGridViewTextBoxColumn Column7;
-        private DataGridViewTextBoxColumn Column8;
-        private DataGridViewTextBoxColumn Column9;
+                ws.Range["A1", "A2"].Merge(); 
+                ws.Cells[1, 1] = "Дата записи";
+
+                ws.Range["B1", "C1"].Merge(); 
+                ws.Cells[1, 2] = "Номер";
+
+                ws.Range["D1", "D2"].Merge(); 
+                ws.Cells[1, 4] = "От кого получено или кому отпущено";
+
+                ws.Range["E1", "E2"].Merge();
+                ws.Cells[1, 5] = "Учетная единица выпуска продукции (работ, услуг)";
+
+                ws.Range["F1", "F2"].Merge(); 
+                ws.Cells[1, 6] = "Приход";
+
+                ws.Range["G1", "G2"].Merge();
+                ws.Cells[1, 7] = "Расход";
+
+                ws.Range["H1", "H2"].Merge(); 
+                ws.Cells[1, 8] = "Остаток";
+
+                ws.Range["I1", "I2"].Merge();
+                ws.Cells[1, 9] = "Подпись, дата";
+
+                ws.Cells[2, 2] = "документа";
+                ws.Cells[2, 3] = "по порядку"; 
+
+                ws.Cells[3, 1] = "1";
+                ws.Cells[3, 2] = "2";
+                ws.Cells[3, 3] = "3";
+                ws.Cells[3, 4] = "4"; 
+                ws.Cells[3, 5] = "5"; 
+                ws.Cells[3, 6] = "6"; 
+                ws.Cells[3, 7] = "7";
+                ws.Cells[3, 8] = "8"; 
+                ws.Cells[3, 9] = "9"; 
+
+                ws.Columns[1].ColumnWidth = 12; 
+                ws.Columns[2].ColumnWidth = 10;
+                ws.Columns[3].ColumnWidth = 8;  
+                ws.Columns[4].ColumnWidth = 30; 
+                ws.Columns[5].ColumnWidth = 25;
+                ws.Columns[6].ColumnWidth = 10; 
+                ws.Columns[7].ColumnWidth = 10; 
+                ws.Columns[8].ColumnWidth = 10; 
+                ws.Columns[9].ColumnWidth = 15; 
+
+                for (int i = 0; i < csvData.Length; i++)
+                {
+                    int row = 4 + i / 9; 
+                    int col = 1 + i % 9;
+                    ws.Cells[row, col] = csvData[i];
+                }
+
+                ExcelApp.Range headerRange = ws.Range["A1", "I3"];
+                headerRange.Font.Bold = true;
+                headerRange.HorizontalAlignment = ExcelApp.XlHAlign.xlHAlignCenter;
+                headerRange.VerticalAlignment = ExcelApp.XlVAlign.xlVAlignCenter;
+
+                int dataRows = (csvData.Length + 8) / 9;
+                ExcelApp.Range tableRange = ws.Range["A1", $"I{3 + dataRows}"];
+                tableRange.Borders.LineStyle = ExcelApp.XlLineStyle.xlContinuous;
+                tableRange.Borders.Weight = ExcelApp.XlBorderWeight.xlThin;
+
+                ws.Rows.AutoFit();
+
+                ws.Range["D1", "E2"].WrapText = true;
+
+                app.Visible = true;
+
+                string fileName = $"Material_Account_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+                wb.SaveAs(fileName);
+
+                MessageBox.Show($"Файл успешно сохранен: {fileName}", "Успех",
+                              MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при сохранении: {ex.Message}", "Ошибка",
+                              MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
