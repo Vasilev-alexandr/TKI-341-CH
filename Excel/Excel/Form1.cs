@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using ExcelApp = Microsoft.Office.Interop.Excel;
 using System.IO;
 using System.Windows.Forms;
@@ -37,7 +37,6 @@ namespace VasilevPracticeExcel
 
         private void CreateDefaultCsvFile(string filePath)
         {
-            // Создаем пример данных для материального аккаунта
             string[] defaultData = {
                 "2025-01-15", "ТН-001", "1", "Поставщик ООО 'ВООВОВИО'", "Сталь", "500", "0", "500", "Иванов 15.01.2025",
                 "2025-01-16", "РН-001", "2", "Цех механической обработки", "Сталь листовая", "0", "200", "300", "Петров 16.01.2025",
@@ -58,79 +57,76 @@ namespace VasilevPracticeExcel
                 ExcelApp.Worksheet ws = (ExcelApp.Worksheet)wb.Sheets[1];
                 ws.Activate();
 
-                // Создаем заголовок с датой
-                ws.Range["A1", "I1"].Merge();
-                ws.Cells[1, 1] = "Дата записи: " + DateTime.Now.ToString("dd.MM.yyyy");
-                ws.Range["A1", "I1"].Font.Bold = true;
-                ws.Range["A1", "I1"].HorizontalAlignment = ExcelApp.XlHAlign.xlHAlignCenter;
+                ws.Range["A1", "A2"].Merge(); 
+                ws.Cells[1, 1] = "Дата записи";
 
-                // Основная шапка таблицы
-                ws.Range["A2", "B2"].Merge();
-                ws.Cells[2, 1] = "Номер документа";
+                ws.Range["B1", "C1"].Merge(); 
+                ws.Cells[1, 2] = "Номер";
 
-                ws.Cells[2, 3] = "От кого получено или кому отправлено";
-                ws.Range["C2", "C3"].Merge();
+                ws.Range["D1", "D2"].Merge(); 
+                ws.Cells[1, 4] = "От кого получено или кому отпущено";
 
-                ws.Cells[2, 4] = "Учетная единица выпуска продукции (работ, услуг)";
-                ws.Range["D2", "D3"].Merge();
+                ws.Range["E1", "E2"].Merge();
+                ws.Cells[1, 5] = "Учетная единица выпуска продукции (работ, услуг)";
 
-                ws.Range["E2", "G2"].Merge();
-                ws.Cells[2, 5] = "Движение материалов";
+                ws.Range["F1", "F2"].Merge(); 
+                ws.Cells[1, 6] = "Приход";
 
-                ws.Range["H2", "I2"].Merge();
-                ws.Cells[2, 8] = "Подпись, дата";
-                ws.Range["H2", "I3"].Merge();
+                ws.Range["G1", "G2"].Merge();
+                ws.Cells[1, 7] = "Расход";
 
-                // Подзаголовки
-                ws.Cells[3, 1] = "по порядку";
-                ws.Cells[3, 2] = "документа";
-                ws.Cells[3, 5] = "Приход";
-                ws.Cells[3, 6] = "Расход";
-                ws.Cells[3, 7] = "Остаток";
+                ws.Range["H1", "H2"].Merge(); 
+                ws.Cells[1, 8] = "Остаток";
 
-                // Нумерация столбцов
-                for (int i = 1; i <= 9; i++)
-                {
-                    ws.Cells[4, i] = i.ToString();
-                }
+                ws.Range["I1", "I2"].Merge();
+                ws.Cells[1, 9] = "Подпись, дата";
 
-                // Настройка ширины столбцов
-                ws.Columns[1].ColumnWidth = 8;
-                ws.Columns[2].ColumnWidth = 12;
-                ws.Columns[3].ColumnWidth = 30;
-                ws.Columns[4].ColumnWidth = 25;
-                ws.Columns[5].ColumnWidth = 10;
-                ws.Columns[6].ColumnWidth = 10;
-                ws.Columns[7].ColumnWidth = 10;
-                ws.Columns[8].ColumnWidth = 15;
-                ws.Columns[9].ColumnWidth = 12;
+                ws.Cells[2, 2] = "документа";
+                ws.Cells[2, 3] = "по порядку"; 
 
-                // Заполнение данными
+                ws.Cells[3, 1] = "1";
+                ws.Cells[3, 2] = "2";
+                ws.Cells[3, 3] = "3";
+                ws.Cells[3, 4] = "4"; 
+                ws.Cells[3, 5] = "5"; 
+                ws.Cells[3, 6] = "6"; 
+                ws.Cells[3, 7] = "7";
+                ws.Cells[3, 8] = "8"; 
+                ws.Cells[3, 9] = "9"; 
+
+                ws.Columns[1].ColumnWidth = 12; 
+                ws.Columns[2].ColumnWidth = 10;
+                ws.Columns[3].ColumnWidth = 8;  
+                ws.Columns[4].ColumnWidth = 30; 
+                ws.Columns[5].ColumnWidth = 25;
+                ws.Columns[6].ColumnWidth = 10; 
+                ws.Columns[7].ColumnWidth = 10; 
+                ws.Columns[8].ColumnWidth = 10; 
+                ws.Columns[9].ColumnWidth = 15; 
+
                 for (int i = 0; i < csvData.Length; i++)
                 {
-                    int row = 5 + i / 9;
+                    int row = 4 + i / 9; 
                     int col = 1 + i % 9;
                     ws.Cells[row, col] = csvData[i];
                 }
 
-                // Форматирование таблицы
-                ExcelApp.Range tableRange = ws.Range["A2", $"I{4 + csvData.Length / 9}"];
+                ExcelApp.Range headerRange = ws.Range["A1", "I3"];
+                headerRange.Font.Bold = true;
+                headerRange.HorizontalAlignment = ExcelApp.XlHAlign.xlHAlignCenter;
+                headerRange.VerticalAlignment = ExcelApp.XlVAlign.xlVAlignCenter;
+
+                int dataRows = (csvData.Length + 8) / 9;
+                ExcelApp.Range tableRange = ws.Range["A1", $"I{3 + dataRows}"];
                 tableRange.Borders.LineStyle = ExcelApp.XlLineStyle.xlContinuous;
                 tableRange.Borders.Weight = ExcelApp.XlBorderWeight.xlThin;
 
-                // Выравнивание
-                tableRange.HorizontalAlignment = ExcelApp.XlHAlign.xlHAlignCenter;
-                tableRange.VerticalAlignment = ExcelApp.XlVAlign.xlVAlignCenter;
-
-                // Жирный шрифт для заголовков
-                ws.Range["A2", "I4"].Font.Bold = true;
-
-                // Автоподбор высоты строк
                 ws.Rows.AutoFit();
+
+                ws.Range["D1", "E2"].WrapText = true;
 
                 app.Visible = true;
 
-                // Сохранение файла
                 string fileName = $"Material_Account_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
                 wb.SaveAs(fileName);
 
