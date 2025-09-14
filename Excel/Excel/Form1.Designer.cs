@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace VasilevPracticeExcel
@@ -45,9 +45,7 @@ namespace VasilevPracticeExcel
             label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)PreviewDGV).BeginInit();
             SuspendLayout();
-            // 
-            // PreviewDGV
-            // 
+            
             PreviewDGV.AllowUserToAddRows = false;
             PreviewDGV.AllowUserToDeleteRows = false;
             PreviewDGV.AllowUserToOrderColumns = true;
@@ -58,63 +56,43 @@ namespace VasilevPracticeExcel
             PreviewDGV.ReadOnly = true;
             PreviewDGV.Size = new Size(943, 260);
             PreviewDGV.TabIndex = 1;
-            // 
-            // Column1
-            // 
+            
             Column1.HeaderText = "Дата записи";
             Column1.Name = "Column1";
             Column1.ReadOnly = true;
-            // 
-            // Column2
-            // 
+            
             Column2.HeaderText = "Номер документа";
             Column2.Name = "Column2";
             Column2.ReadOnly = true;
-            // 
-            // Column3
-            // 
+           
             Column3.HeaderText = "Номер по порядку";
             Column3.Name = "Column3";
             Column3.ReadOnly = true;
-            // 
-            // Column4
-            // 
+            
             Column4.HeaderText = "Получено/отправлено";
             Column4.Name = "Column4";
             Column4.ReadOnly = true;
-            // 
-            // Column5
-            // 
+             
             Column5.HeaderText = "Единица продукции";
             Column5.Name = "Column5";
             Column5.ReadOnly = true;
-            // 
-            // Column6
-            // 
+           
             Column6.HeaderText = "Приход";
             Column6.Name = "Column6";
             Column6.ReadOnly = true;
-            // 
-            // Column7
-            // 
+            
             Column7.HeaderText = "Расход";
             Column7.Name = "Column7";
             Column7.ReadOnly = true;
-            // 
-            // Column8
-            // 
+           
             Column8.HeaderText = "Остаток";
             Column8.Name = "Column8";
             Column8.ReadOnly = true;
-            // 
-            // Column9
-            // 
+             
             Column9.HeaderText = "Дата, подпись";
             Column9.Name = "Column9";
             Column9.ReadOnly = true;
-            // 
-            // buttonSave
-            // 
+          
             buttonSave.Location = new Point(843, 293);
             buttonSave.Name = "buttonSave";
             buttonSave.Size = new Size(111, 23);
@@ -122,25 +100,21 @@ namespace VasilevPracticeExcel
             buttonSave.Text = "Выгрузка в Excel";
             buttonSave.UseVisualStyleBackColor = true;
             buttonSave.Click += buttonSave_Click;
-            // 
-            // label1
-            // 
+           
             label1.AutoSize = true;
             label1.Location = new Point(12, 9);
             label1.Name = "label1";
             label1.Size = new Size(90, 15);
             label1.TabIndex = 2;
             label1.Text = "Предпросмотр";
-            // 
-            // ExcelAutomationForm
-            // 
+           
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(966, 324);
             Controls.Add(label1);
             Controls.Add(PreviewDGV);
             Controls.Add(buttonSave);
-            Name = "ExcelAutomationForm";
+            Name = "Form1";
             Text = "Задание №2 выполнил: Васильев А.С., Номер варианта: 3 Дата выполнения: 15/08/2025";
             ((System.ComponentModel.ISupportInitialize)PreviewDGV).EndInit();
             ResumeLayout(false);
