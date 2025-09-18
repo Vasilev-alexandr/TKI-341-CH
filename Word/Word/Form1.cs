@@ -129,6 +129,8 @@ namespace WordAutomation
         {
             leftMarginOffset = trackBarLeftMargin.Value;
             lblMarginValue.Text = leftMarginOffset.ToString();
+
+            lblMarginValue.Text = $"{leftMarginOffset} мм";
         }
 
         private void ConfigureDocumentStyles(Document doc)
@@ -175,67 +177,109 @@ namespace WordAutomation
             }
         }
 
+        private void AddParagraphWithLeftMargin(Document doc, object endOfDoc, string text, int fontSize, int leftMargin)
+        {
+            object range = doc.Bookmarks.get_Item(ref endOfDoc).Range;
+            Paragraph paragraph = doc.Content.Paragraphs.Add(ref range);
+            paragraph.Range.Text = text;
+            paragraph.Range.Font.Name = "Times New Roman";
+            paragraph.Range.Font.Size = fontSize;
+            paragraph.Format.LeftIndent = wordApp.CentimetersToPoints(leftMargin / 10f);
+            paragraph.Range.InsertParagraphAfter();
+        }
+
+        private void AddTableForSignatures(Document doc, object endOfDoc)
+        {
+            object range = doc.Bookmarks.get_Item(ref endOfDoc).Range;
+
+            Table table = doc.Tables.Add((Range)range, 4, 2);
+            table.Borders.Enable = 0;
+            table.Borders.OutsideLineStyle = WdLineStyle.wdLineStyleNone;
+            table.Borders.InsideLineStyle = WdLineStyle.wdLineStyleNone;
+
+            table.Columns[1].PreferredWidth = 200;
+            table.Columns[2].PreferredWidth = 200;
+
+            table.Cell(1, 1).Range.Text = "Выполнил:";
+            table.Cell(1, 2).Range.Text = "ст. гр. ТКИ – 341";
+            table.Cell(2, 1).Range.Text = "";
+            table.Cell(2, 2).Range.Text = "Васильев А. С.";
+            table.Cell(3, 1).Range.Text = "Проверил:";
+            table.Cell(3, 2).Range.Text = "доц. к.т.н.";
+            table.Cell(4, 1).Range.Text = "";
+            table.Cell(4, 2).Range.Text = "Сафронов А. И.";
+
+            foreach (Row row in table.Rows)
+            {
+                foreach (Cell cell in row.Cells)
+                {
+                    cell.Range.Font.Name = "Times New Roman";
+                    cell.Range.Font.Size = 14;
+                    cell.VerticalAlignment = WdCellVerticalAlignment.wdCellAlignVerticalCenter;
+                    cell.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphLeft;
+                }
+            }
+
+            DebugTableLayout(table);
+
+            table.Rows.Alignment = WdRowAlignment.wdAlignRowRight;
+
+            table.LeftPadding = 0;
+            table.Range.ParagraphFormat.LeftIndent = wordApp.CentimetersToPoints(leftMarginOffset / 10f);
+
+            table.Range.InsertParagraphAfter();
+        }
+
+        private void DebugTableLayout(Table table)
+        {
+            MessageBox.Show($"Table left indent: {table.Range.ParagraphFormat.LeftIndent}\n" +
+                           $"Left margin offset: {leftMarginOffset}\n" +
+                           $"Left padding: {table.LeftPadding}");
+        }
         private void AddTitlePage(Document doc, object endOfDoc)
         {
-            doc.PageSetup.LeftMargin = 0;
-            doc.PageSetup.RightMargin = 0;
+            doc.PageSetup.LeftMargin = wordApp.CentimetersToPoints(0f);
+            doc.PageSetup.RightMargin = wordApp.CentimetersToPoints(0f);
 
             AddCenteredText(doc, endOfDoc, "ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ АВТОНОМНОЕ", 14, false);
             AddCenteredText(doc, endOfDoc, "ОБРАЗОВАТЕЛЬНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ", 14, false);
             AddCenteredText(doc, endOfDoc, "«РОССИЙСКИЙ УНИВЕРСИТЕТ ТРАНСПОРТА»", 14, false);
             AddCenteredText(doc, endOfDoc, "(РУТ (МИИТ))", 14, false);
-            AddEmptyParagraph(doc, endOfDoc);
-            AddEmptyParagraph(doc, endOfDoc);
-            AddEmptyParagraph(doc, endOfDoc);
+
+            for (int i = 0; i < 3; i++) AddEmptyParagraph(doc, endOfDoc);
+
             AddCenteredText(doc, endOfDoc, "Институт транспортной техники и систем управления", 14, false);
-            AddCenteredText(doc, endOfDoc, "Кафедra «Управление и защита информации»", 14, false);
-            AddEmptyParagraph(doc, endOfDoc);
-            AddEmptyParagraph(doc, endOfDoc);
-            AddEmptyParagraph(doc, endOfDoc);
-            AddEmptyParagraph(doc, endOfDoc);
+            AddCenteredText(doc, endOfDoc, "Кафедра «Управление и защита информации»", 14, false);
+
+            for (int i = 0; i < 4; i++) AddEmptyParagraph(doc, endOfDoc);
+
             AddCenteredText(doc, endOfDoc, "ОТЧЁТ", 14, false);
             AddCenteredText(doc, endOfDoc, "по практической работе", 14, false);
             AddCenteredText(doc, endOfDoc, "«Договор коммерческой концессии»", 14, true);
             AddCenteredText(doc, endOfDoc, "По дисциплине «Алгоритмизация и технологии программирования»", 14, false);
 
-            for (int i = 0; i < 7; i++)
-            {
-                AddEmptyParagraph(doc, endOfDoc);
-            }
+            for (int i = 0; i < 7; i++) AddEmptyParagraph(doc, endOfDoc);
 
-            AddRightAlignedText(doc, endOfDoc, "Выполнил: ст. гр. ТКИ – 341", 14, false);
+            AddTableForSignatures(doc, endOfDoc);
 
-            AddRightAlignedText(doc, endOfDoc, "Васильев А. С.", 14, false);
-
-            AddRightAlignedText(doc, endOfDoc, "Проверил: доц. к.т.н. Сафронов А. И.", 14, false);
-
-            for (int i = 0; i < 10; i++)
-            {
-                AddEmptyParagraph(doc, endOfDoc);
-            }
+            for (int i = 0; i < 10; i++) AddEmptyParagraph(doc, endOfDoc);
 
             AddCenteredText(doc, endOfDoc, "Москва 2025", 14, false);
         }
 
         private void AddContractContent(Document doc, object endOfDoc)
         {
-            doc.PageSetup.LeftMargin = 0;
-            doc.PageSetup.RightMargin = 0;
+            doc.PageSetup.LeftMargin = wordApp.CentimetersToPoints(0f);
+            doc.PageSetup.RightMargin = wordApp.CentimetersToPoints(0f);
 
             doc.Styles[WdBuiltinStyle.wdStyleNormal].Font.Size = 11;
 
             AddCenteredTextWithSpacing(doc, endOfDoc, "ДОГОВОР", 11, true, 6, 0);
-
             AddCenteredTextWithSpacing(doc, endOfDoc, "коммерческой концессии", 11, false, 6, 0);
-
             AddEmptyParagraph(doc, endOfDoc);
-
             AddCityDateLine(doc, endOfDoc);
-
             AddEmptyParagraphWithSpacing(doc, endOfDoc, 12, 6);
-
             AddContractParties(doc, endOfDoc);
-
             AddContractText(doc, endOfDoc);
         }
 
