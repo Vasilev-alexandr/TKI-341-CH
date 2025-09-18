@@ -1,0 +1,11 @@
+C:\C#\Word\Word\bin\Debug\Word.exe.config
+C:\C#\Word\Word\bin\Debug\Word.exe
+C:\C#\Word\Word\bin\Debug\Word.pdb
+C:\C#\Word\Word\obj\Debug\Word.csproj.AssemblyReference.cache
+C:\C#\Word\Word\obj\Debug\Word.Properties.Resources.resources
+C:\C#\Word\Word\obj\Debug\Word.csproj.GenerateResource.cache
+C:\C#\Word\Word\obj\Debug\Word.csproj.CoreCompileInputs.cache
+C:\C#\Word\Word\obj\Debug\Word.exe
+C:\C#\Word\Word\obj\Debug\Word.pdb
+C:\C#\Word\Word\obj\Debug\Word.csproj.ResolveComReference.cache
+C:\C#\Word\Word\obj\Debug\WordAutomation.Form1.resources
